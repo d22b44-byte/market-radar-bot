@@ -1,9 +1,11 @@
 import os
 from openai import OpenAI
 
-# ضع مفتاح الـ API الخاص بك المبتدئ بـ sk- بين القوسين أدناه مكان الكلمة المكتوبة
+# الكود يسحب المفتاح تلقائياً من سيرفر Railway بأمان
 API_KEY = os.environ.get("OPENAI_API_KEY")
 
+if not API_KEY:
+    raise ValueError("⚠️ خطأ: لم يتم العثور على مفتاح OPENAI_API_KEY في متغيرات السيرفر!")
 
 client = OpenAI(api_key=API_KEY)
 
@@ -18,7 +20,7 @@ def analyze_market_data(raw_data):
     )
     try:
         response = client.chat.completions.create(
-            model="gpt-4-turbo", # تم تحديث النموذج ليعمل بأعلى كفاءة مع المفاتيح الجديدة
+            model="gpt-4o-mini",
             messages=[
                 {"role": "system", "content": system_instruction},
                 {"role": "user", "content": f"إليك البيانات الخام المجمعة من السوق للتحليل والفرز:\n\n{raw_data}"}
